@@ -8,7 +8,7 @@ class Days extends Component {
         <h3>{this.props.dayName}</h3>
         <p>{this.props.date}</p>
         <img></img>
-        <h1>35 C</h1>
+        <h1>{this.props.temp}</h1>
         <p>Clear sky</p>
       </div>
     );

@@ -5,6 +5,13 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 function App() {
+  const obj = {
+    id: 1,
+    lol: 2,
+    opa: {
+      xiar: 3,
+    },
+  };
   const [data, setData] = useState();
   const url =
     "https://api.open-meteo.com/v1/forecast?latitude=40.18&longitude=44.51&daily=weathercode,temperature_2m_min&timezone=auto";
@@ -17,18 +24,42 @@ function App() {
       <h1 className="background">5-Day forecast</h1>
       <p className="location">Berlin</p>
       <div className="mainBox">
-        <Days date="March 1st, 1:00pm" dayName="Sunday" />
-        <Days date="March 1st, 1:00pm" dayName="Monday" />
-        <Days date="March 1st, 1:00pm" dayName="Thursday" />
-        <Days date="March 1st, 1:00pm" dayName="Wednsday" />
-        <Days date="March 1st, 1:00pm" dayName="Tuesday" />
-        <Days date="March 1st, 1:00pm" dayName="Friday" />
-        <Days date="March 1st, 1:00pm" dayName="Saturday" />
-        <p>
-          {data.daily.time.map(date => (
-            <div>{date}</div>
-          ))}
-        </p>
+        <Days
+          date={data.daily.time[0]}
+          dayName="Sunday"
+          temp={data.daily.temperature_2m_min[0]}
+        />
+        <Days
+          date={data.daily.time[1]}
+          dayName="Monday"
+          temp={data.daily.temperature_2m_min[1]}
+        />
+        <Days
+          date={data.daily.time[2]}
+          dayName="Thursday"
+          temp={data.daily.temperature_2m_min[2]}
+        />
+        <Days
+          date={data.daily.time[3]}
+          dayName="Wednsday"
+          temp={data.daily.temperature_2m_min[3]}
+        />
+        <Days
+          date={data.daily.time[4]}
+          dayName="Tuesday"
+          temp={data.daily.temperature_2m_min[4]}
+        />
+        <Days
+          date={data.daily.time[5]}
+          dayName="Friday"
+          temp={data.daily.temperature_2m_min[5]}
+        />
+        <Days
+          date={data.daily.time[6]}
+          dayName="Saturday"
+          temp={data.daily.temperature_2m_min[6]}
+        />
+        <p>{data.daily.temperature_2m_min[1]}</p>
       </div>
     </div>
   );
