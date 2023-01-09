@@ -3,11 +3,20 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import GetWeather from "./components/GetWeather";
 import Days from "./components/Days.tsx";
+import {
+  TextField,
+  Grid,
+  Card,
+  CardContent,
+  Button,
+  Typography,
+} from "@mui/material";
 
 function App() {
   const [data, setData] = useState("");
   const [input, setInput] = useState("");
   const [cordData, setCordData] = useState("");
+  const [city, setCity] = useState("");
   function inputHandler(event) {
     setInput(event.target.value);
   }
@@ -20,6 +29,7 @@ function App() {
       )
       .then(response => {
         setCordData(response.data);
+        setCity(response.data.results[0].locations[0].adminArea5);
         console.log(response.data);
       });
     axios
@@ -27,8 +37,8 @@ function App() {
         "https://api.open-meteo.com/v1/forecast?daily=weathercode,temperature_2m_max&timeformat=unixtime&timezone=auto",
         {
           params: {
-            latitude: cordData.results[0].locations[0].latLng.lat,
-            longitude: cordData.results[0].locations[0].latLng.lng,
+            latitude: cordData.results?.[0].locations[0].latLng.lat,
+            longitude: cordData.results?.[0].locations[0].latLng.lng,
           },
         }
       )
@@ -37,19 +47,39 @@ function App() {
         console.log(response.data);
       });
   }
-
+  useEffect(() => {
+    setCity(city);
+  }, [city]);
   return (
-    <div>
-      <input onChange={inputHandler}></input>
-      <button onClick={clickHandler}>Submit</button>
-      <React.Fragment>
+    <Grid>
+      <Grid align="center">
+        <TextField
+          size="small"
+          autoFocus
+          label="Zip Code"
+          onChange={inputHandler}
+        ></TextField>
+        <Button variant="contained" onClick={clickHandler}>
+          Submit
+        </Button>
+      </Grid>
+      <Typography variant="h1" align="center">
+        {city}
+      </Typography>
+      <Grid container alignItems="center" justifyContent="center">
         {data.daily
           ? data.daily.temperature_2m_max.map((value, id) => (
-              <Days temp={value} key={id} />
+              <Card key={id} variant="outlined">
+                <Days
+                  temp={value}
+                  key={id}
+                  date={new Date(data.daily.time[id] * 1000)}
+                />
+              </Card>
             ))
           : null}
-      </React.Fragment>
-    </div>
+      </Grid>
+    </Grid>
   );
 }
 
