@@ -15,7 +15,6 @@ import {
 function App() {
   const [data, setData] = useState("");
   const [input, setInput] = useState("");
-  const [cordData, setCordData] = useState("");
   const [city, setCity] = useState("");
   function inputHandler(event) {
     setInput(event.target.value);
@@ -28,28 +27,24 @@ function App() {
         { params: { location: postal } }
       )
       .then(response => {
-        setCordData(response.data);
+        const cordData = response.data;
         setCity(response.data.results[0].locations[0].adminArea5);
         console.log(response.data);
-      });
-    axios
-      .get(
-        "https://api.open-meteo.com/v1/forecast?daily=weathercode,temperature_2m_max&timeformat=unixtime&timezone=auto",
-        {
-          params: {
-            latitude: cordData.results?.[0].locations[0].latLng.lat,
-            longitude: cordData.results?.[0].locations[0].latLng.lng,
-          },
-        }
-      )
+        return axios.get(
+          "https://api.open-meteo.com/v1/forecast?daily=weathercode,temperature_2m_max&timeformat=unixtime&timezone=auto",
+          {
+            params: {
+              latitude: cordData.results?.[0].locations[0].latLng.lat,
+              longitude: cordData.results?.[0].locations[0].latLng.lng,
+            },
+          }
+        );
+      })
       .then(response => {
         setData(response.data);
         console.log(response.data);
       });
   }
-  useEffect(() => {
-    setCity(city);
-  }, [city]);
   return (
     <Grid>
       <Grid align="center">
